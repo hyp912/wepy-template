@@ -1,74 +1,34 @@
+<style lang="scss" src="./styles/zent.scss"></style>
+<style lang="scss" src="./styles/base.scss"></style>
+<style lang="scss" src="./styles/icons.scss"></style>
 <style lang="scss">
-.container {
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: space-between;
-  box-sizing: border-box;
-}
+  @import "./styles/weui";
+  @import "./styles/weui-extend";
 </style>
 
 <script>
 import wepy from 'wepy'
 import 'wepy-async-function'
 
-import { setStore } from 'wepy-redux'
-import configStore from './store'
-
-const store = configStore()
-setStore(store)
-
 export default class extends wepy.app {
+  globalData = {
+    baseUrl: 'https://YOUR_DOMAIN/api',
+    version: 'v1.0.0'
+  }
+  constructor () {
+    super()
+    this.use('requestfix')
+    this.use('promisify')
+  }
   config = {
     pages: [
       'pages/index'
     ],
     window: {
-      backgroundTextStyle: 'light',
-      navigationBarBackgroundColor: '#fff',
-      navigationBarTitleText: 'WeChat',
-      navigationBarTextStyle: 'black'
+      backgroundTextStyle: 'dark',
+      backgroundColor: '#f5f5f5',
+      navigationBarBackgroundColor: '#7796ff'
     }
-  }
-
-  globalData = {
-    userInfo: null
-  }
-
-  constructor () {
-    super()
-    this.use('requestfix')
-  }
-
-  onLaunch() {
-    this.testAsync()
-  }
-
-  sleep (s) {
-    return new Promise((resolve, reject) => {
-      setTimeout(() => {
-        resolve('promise resolved')
-      }, s * 1000)
-    })
-  }
-
-  async testAsync () {
-    const data = await this.sleep(3)
-    console.log(data)
-  }
-
-  getUserInfo(cb) {
-    const that = this
-    if (this.globalData.userInfo) {
-      return this.globalData.userInfo
-    }
-    wepy.getUserInfo({
-      success (res) {
-        that.globalData.userInfo = res.userInfo
-        cb && cb(res.userInfo)
-      }
-    })
   }
 }
 </script>
